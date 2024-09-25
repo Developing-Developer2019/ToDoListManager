@@ -1,9 +1,11 @@
+using Core.Enum;
 using Core.Model;
 
 namespace Service.Interface;
 
 public interface ITodoService
 {
-    Task<List<Todo>> GetAllTodoAsync();
-    Task<Todo> GetTodoById(int id);
+    IQueryable<Todo> GetAllTodos();
+    IQueryable<Todo> GetTodoById(int id);
+    IQueryable<Todo> GetTodoByPriority(Priority priority);
 }

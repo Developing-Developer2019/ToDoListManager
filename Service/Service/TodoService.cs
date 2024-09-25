@@ -1,28 +1,31 @@
+using Core.Enum;
 using Core.Model;
 using Data.Data;
-using Microsoft.EntityFrameworkCore;
 using Service.Interface;
 
 namespace Service.Service;
 
 public class TodoService : ITodoService
 {
-    private readonly ReadDbContext? _readDbContext;
+    private readonly ReadDbContext _readDbContext;
 
-    public TodoService(ReadDbContext? readDbContext)
+    public TodoService(ReadDbContext readDbContext)
     {
         _readDbContext = readDbContext;
     }
 
-    public async Task<List<Todo>> GetAllTodoAsync()
+    public IQueryable<Todo> GetAllTodos()
     {
-        var todoList = await _readDbContext!.Todo.ToListAsync();
-        return todoList;
+        return _readDbContext.Todo;
     }
 
-    public async Task<Todo> GetTodoById(int id)
+    public IQueryable<Todo> GetTodoById(int id)
     {
-        var todo = await _readDbContext!.Todo.FirstOrDefaultAsync(e => e.Id == id);
-        return todo ?? throw new Exception("Cannot find Todo with that ID");
+        return _readDbContext.Todo.Where(e => e.Id == id);
+    }
+
+    public IQueryable<Todo> GetTodoByPriority(Priority priority)
+    {
+        return _readDbContext.Todo.Where(e => e.Priority == priority);
     }
 }
