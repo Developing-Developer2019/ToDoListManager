@@ -13,6 +13,7 @@ public static class ModelBuilderExtensions
 
     public static void Seed(this ModelBuilder modelBuilder)
     {
+        modelBuilder.SeedUsers();
         modelBuilder.SeedTodos();
     }
 }

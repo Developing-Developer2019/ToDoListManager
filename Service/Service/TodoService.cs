@@ -5,27 +5,20 @@ using Service.Interface;
 
 namespace Service.Service;
 
-public class TodoService : ITodoService
+public class TodoService(ReadDbContext readDbContext) : ITodoService
 {
-    private readonly ReadDbContext _readDbContext;
-
-    public TodoService(ReadDbContext readDbContext)
+    public IQueryable<Todo> GetTodosByUserId(string userId)
     {
-        _readDbContext = readDbContext;
+        return readDbContext.Todo.Where(t => t.UserId == userId);
     }
 
-    public IQueryable<Todo> GetAllTodos()
+    public IQueryable<Todo> GetTodoByTodoId(int id, string userId)
     {
-        return _readDbContext.Todo;
-    }
-
-    public IQueryable<Todo> GetTodoById(int id)
-    {
-        return _readDbContext.Todo.Where(e => e.Id == id);
+        return readDbContext.Todo.Where(e => e.Id == id && e.UserId == userId);
     }
 
     public IQueryable<Todo> GetTodoByPriority(Priority priority)
     {
-        return _readDbContext.Todo.Where(e => e.Priority == priority);
+        return readDbContext.Todo.Where(e => e.Priority == priority);
     }
 }
