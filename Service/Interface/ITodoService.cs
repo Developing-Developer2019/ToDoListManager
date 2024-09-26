@@ -7,5 +7,6 @@ public interface ITodoService
 {
     IQueryable<Todo> GetTodosByUserId(string userId);
     IQueryable<Todo> GetTodoByTodoId(int id, string userId);
-    IQueryable<Todo> GetTodoByPriority(Priority priority);
+    IQueryable<Todo> GetTodoByPriority(Priority priority, string userId);
+    string GetJwtToken(string userId);
 }

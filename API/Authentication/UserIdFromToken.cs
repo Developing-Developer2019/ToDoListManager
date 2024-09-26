@@ -1,4 +1,5 @@
-using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Authentication;
 
@@ -6,25 +7,43 @@ public static class UserIdFromToken
 {
     public static string? GetUserIdFromToken(HttpContext httpContext)
     {
-        // Try to get the 'sub' claim which contains the UserId
-        var userId = httpContext.User.FindFirst("sub")?.Value;
-
-        if (string.IsNullOrEmpty(userId))
-        {
-            // Handle the case when no UserId is present (unauthorized or bad token)
-            throw new UnauthorizedAccessException("The JWT token does not contain a valid UserId.");
-        }
-
-        return userId;
+        var token = GetToken(httpContext);
+        
+        return !string.IsNullOrEmpty(token) ? 
+            ExtractUserIdFromJwt(token) : 
+            token;
     }
-    
-    private static string? GetRawToken(HttpContext httpContext)
+
+    private static string? GetToken(HttpContext httpContext)
     {
-        var authorizationHeader = httpContext.Request.Headers.Authorization.ToString();
-        if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
+        if (httpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader) &&
+            authorizationHeader.ToString().StartsWith("Bearer "))
         {
-            return authorizationHeader["Bearer ".Length..];
+            return authorizationHeader.ToString()["Bearer ".Length..];
         }
+
         return null;
+    }
+
+    private static string? ExtractUserIdFromJwt(string token)
+    {
+        try
+        {
+            var jwtHandler = new JwtSecurityTokenHandler();
+            if (!jwtHandler.CanReadToken(token))
+            {
+                return null;
+            }
+            
+            var jwtToken = jwtHandler.ReadJwtToken(token);
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "sub");
+
+            return userIdClaim?.Value;
+
+        }
+        catch (Exception ex)
+        {
+            throw new SecurityTokenException("Invalid JWT token.", ex);
+        }
     }
 }
