@@ -14,7 +14,7 @@ namespace Specflow.Component.Steps;
 [Binding]
 public class TodoQuerySteps
 {
-    private readonly Mock<ITodoService> _mockTodoService;
+    private readonly Mock<ITodoQueryService> _mockTodoService;
     private readonly Mock<IHttpContextAccessor> _mockHttpContextAccessor;
     private IQueryable<Todo> _todos;
     private string _userId;
@@ -23,7 +23,7 @@ public class TodoQuerySteps
 
     public TodoQuerySteps()
     {
-        _mockTodoService = new Mock<ITodoService>();
+        _mockTodoService = new Mock<ITodoQueryService>();
         _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
         var mockHttpContext = new DefaultHttpContext();
         _mockHttpContextAccessor.Setup(a => a.HttpContext).Returns(mockHttpContext);

@@ -5,30 +5,30 @@ using Service.Interface;
 
 namespace API.Queries;
 
-public class Query(ITodoService todoService, IHttpContextAccessor httpContextAccessor)
+public class Query(ITodoQueryService todoQueryService, IHttpContextAccessor httpContextAccessor)
 {
     public IQueryable<Todo> GetTodosByUserId()
     {
         var userId = GetUserId();
-        var todos = todoService.GetTodosByUserId(userId);
+        var todos = todoQueryService.GetTodosByUserId(userId);
         return ValidateTodos(todos);
     }
 
     public IQueryable<Todo> GetTodoByTodoId(int id)
     {
         var userId = GetUserId();
-        var todo = todoService.GetTodoByTodoId(id, userId);
+        var todo = todoQueryService.GetTodoByTodoId(id, userId);
         return ValidateTodos(todo);
     }
 
-    public IQueryable<Todo> GetTodoByTodoByPriority(Priority priority)
+    public IQueryable<Todo> GetTodosByPriority(Priority priority)
     {
         var userId = GetUserId();
-        var todo = todoService.GetTodoByPriority(priority, userId);
+        var todo = todoQueryService.GetTodoByPriority(priority, userId);
         return ValidateTodos(todo);
     }
 
-    public string GenerateJwtToken(string userId) => todoService.GetJwtToken(userId);
+    public string GenerateJwtToken(string userId) => todoQueryService.GetJwtToken(userId);
     
     private string GetUserId()
     {
