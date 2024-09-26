@@ -1,4 +1,5 @@
 using API.Error;
+using API.Mutations;
 using API.Queries;
 using Data.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,13 +23,15 @@ builder.Services.AddDbContext<ReadDbContext>(options =>
     ));
 
 // Register services
-builder.Services.AddTransient<ITodoService, TodoService>();
+builder.Services.AddTransient<ITodoQueryService, TodoQueryQueryService>();
+builder.Services.AddTransient<ITodoMutationService, TodoMutationService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 // Add GraphQL services
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
     .AddErrorFilter<ErrorFilter>()
     .AddFiltering()
     .AddSorting()
