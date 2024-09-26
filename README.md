@@ -1,5 +1,7 @@
 # To Do List Manager
 
+This project is a learning piece for GraphQL and Specflow. It is not intended for any other use.
+
 ## User Story:
 - Users can interact with the application through a web interface (MVC).
 - Users can create, modify, and delete tasks.
