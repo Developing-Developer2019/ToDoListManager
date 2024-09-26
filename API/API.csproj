@@ -8,20 +8,27 @@
 
     <ItemGroup>
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.12" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.9.12" />
         <PackageReference Include="HotChocolate.Data" Version="13.9.12" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.9.12" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\Service\Service.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Mutations\" />
     </ItemGroup>
 
 </Project>

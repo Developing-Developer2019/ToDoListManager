@@ -8,6 +8,7 @@ public class WriteDbContext : DbContext
     public WriteDbContext(DbContextOptions<WriteDbContext> options) : base(options) { }
 
     public DbSet<Todo> Todo { get; set; }
+    public DbSet<User>AppUser { get; set; }
      
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

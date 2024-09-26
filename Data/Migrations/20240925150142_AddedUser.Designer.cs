@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20240925130227_Initial")]
-    partial class Initial
+    [Migration("20240925150142_AddedUser")]
+    partial class AddedUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,13 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Todo");
 
@@ -57,30 +63,65 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "",
-                            DueDateT = new DateTime(2024, 9, 27, 14, 2, 27, 69, DateTimeKind.Local).AddTicks(2035),
+                            Description = "Some Description",
+                            DueDateT = new DateTime(2024, 9, 27, 16, 1, 42, 581, DateTimeKind.Local).AddTicks(6476),
                             IsCompleted = false,
                             Priority = 2,
-                            Title = "Task 1"
+                            Title = "Task 1",
+                            UserId = "dff66c34-bd9b-4355-80ba-e7c7cd02d83f"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "",
-                            DueDateT = new DateTime(2024, 10, 1, 14, 2, 27, 69, DateTimeKind.Local).AddTicks(2096),
+                            Description = "Some Description",
+                            DueDateT = new DateTime(2024, 10, 1, 16, 1, 42, 581, DateTimeKind.Local).AddTicks(6535),
                             IsCompleted = false,
                             Priority = 1,
-                            Title = "Task 2"
+                            Title = "Task 2",
+                            UserId = "dff66c34-bd9b-4355-80ba-e7c7cd02d83f"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "",
-                            DueDateT = new DateTime(2024, 9, 29, 14, 2, 27, 69, DateTimeKind.Local).AddTicks(2098),
+                            Description = "Some Description",
+                            DueDateT = new DateTime(2024, 9, 29, 16, 1, 42, 581, DateTimeKind.Local).AddTicks(6537),
                             IsCompleted = false,
                             Priority = 3,
-                            Title = "Task 3"
+                            Title = "Task 3",
+                            UserId = "dff66c34-bd9b-4355-80ba-e7c7cd02d83f"
                         });
+                });
+
+            modelBuilder.Entity("Core.Model.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "dff66c34-bd9b-4355-80ba-e7c7cd02d83f",
+                            Name = "Example User"
+                        });
+                });
+
+            modelBuilder.Entity("Core.Model.Todo", b =>
+                {
+                    b.HasOne("Core.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
