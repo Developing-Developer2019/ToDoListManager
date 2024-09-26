@@ -9,56 +9,47 @@ public class Query(ITodoService todoService, IHttpContextAccessor httpContextAcc
 {
     public IQueryable<Todo> GetTodosByUserId()
     {
-        var userId = UserIdFromToken.GetUserIdFromToken(httpContextAccessor.HttpContext ?? throw new Exception("Can't find HttpContext"));
-        if (httpContextAccessor.HttpContext?.User == null || userId == null)
-        {
-            throw new UnauthorizedAccessException("User not authorized or UserId not found.");
-        }
-
+        var userId = GetUserId();
         var todos = todoService.GetTodosByUserId(userId);
-        if (todos == null || !todos.Any())
-        {
-            throw new Exception("No todos found for the user.");
-        }
-
-        return todos.AsQueryable();
+        return ValidateTodos(todos);
     }
 
     public IQueryable<Todo> GetTodoByTodoId(int id)
     {
-        
-        var userId = UserIdFromToken.GetUserIdFromToken(httpContextAccessor.HttpContext ?? throw new Exception("Can't find HttpContext"));
-        if (httpContextAccessor.HttpContext?.User == null || userId == null)
-        {
-            throw new UnauthorizedAccessException("User not authorized or TodoId not found.");
-        }
-        
+        var userId = GetUserId();
         var todo = todoService.GetTodoByTodoId(id, userId);
-        if (todo == null || !todo.Any())
-        {
-            throw new Exception("No todo found or unable to retrieve todo.");
-        }
-
-        return todo;
+        return ValidateTodos(todo);
     }
-    
+
     public IQueryable<Todo> GetTodoByTodoByPriority(Priority priority)
     {
-        
-        var userId = UserIdFromToken.GetUserIdFromToken(httpContextAccessor.HttpContext ?? throw new Exception("Can't find HttpContext"));
-        if (httpContextAccessor.HttpContext?.User == null || userId == null)
-        {
-            throw new UnauthorizedAccessException("User not authorized or TodoId not found.");
-        }
-        
+        var userId = GetUserId();
         var todo = todoService.GetTodoByPriority(priority, userId);
-        if (todo == null || !todo.Any())
+        return ValidateTodos(todo);
+    }
+
+    public string GenerateJwtToken(string userId) => todoService.GetJwtToken(userId);
+    
+    private string GetUserId()
+    {
+        var httpContext = httpContextAccessor.HttpContext ?? throw new Exception("Can't find HttpContext");
+        var userId = UserIdFromToken.GetUserIdFromToken(httpContext);
+        
+        if (httpContext.User == null || userId == null)
         {
-            throw new Exception("No todo found or unable to retrieve todo.");
+            throw new UnauthorizedAccessException("User not authorized or UserId not found.");
         }
 
-        return todo;
+        return userId;
     }
-    
-    public string GenerateJwtToken(string userId) => todoService.GetJwtToken(userId);
+
+    private IQueryable<Todo> ValidateTodos(IQueryable<Todo> todos)
+    {
+        if (todos == null || !todos.Any())
+        {
+            throw new Exception("No todos found.");
+        }
+
+        return todos;
+    }
 }
