@@ -6,21 +6,24 @@ namespace Service.Service;
 
 public class TodoMutationService(WriteDbContext writeDbContext) : ITodoMutationService
 {
-    public async Task AddTodoAsync(Todo todo)
+    public async Task<Todo> AddTodoAsync(Todo todo)
     {
-        await writeDbContext.Todo.AddAsync(todo);
+        var task = await writeDbContext.Todo.AddAsync(todo);
         await writeDbContext.SaveChangesAsync();
+        return task.Entity;
     }
 
-    public async Task UpdateTodoAsync(Todo todo)
+    public async Task<Todo> UpdateTodoAsync(Todo todo)
     {
-        writeDbContext.Todo.Update(todo);
+       var task = writeDbContext.Todo.Update(todo);
         await writeDbContext.SaveChangesAsync();
+        return task.Entity;
     }
 
-    public async Task DeleteTodoAsync(Todo todo)
+    public async Task<bool> DeleteTodoAsync(Todo todo)
     {
         writeDbContext.Todo.Remove(todo);
-        await writeDbContext.SaveChangesAsync();
+        var result = await writeDbContext.SaveChangesAsync();
+        return result > 0;
     }
 }

@@ -1,3 +1,4 @@
+@query
 Feature: Todo Queries
 
     Scenario: Retrieve Todos by UserId

@@ -4,7 +4,7 @@ namespace Service.Interface;
 
 public interface ITodoMutationService
 {
-    Task AddTodoAsync(Todo todo);
-    Task UpdateTodoAsync(Todo todo);
-    Task DeleteTodoAsync(Todo todo);
+    Task<Todo> AddTodoAsync(Todo todo);
+    Task<Todo> UpdateTodoAsync(Todo todo);
+    Task<bool> DeleteTodoAsync(Todo todo);
 }
