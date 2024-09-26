@@ -1,6 +1,13 @@
 # To Do List Manager
 
-This project is a learning piece for GraphQL and Specflow. It is not intended for any other use.
+> [!IMPORTANT]
+> This project is a learning piece for GraphQL and Specflow. It is not intended for any other use.
+
+## Table of Contents
+- [x] [Project Information](#user-story)
+- [x] [Setup](#setup)
+- [x] [Queries](#queries)
+- [ ] [Mutations](#Mutations)
 
 ## User Story:
 - Users can interact with the application through a web interface (MVC).
@@ -8,7 +15,6 @@ This project is a learning piece for GraphQL and Specflow. It is not intended fo
 - Tasks can be filtered by priority, completion status, and due date.
 - Users can mark tasks as completed.
 - Authentication is required for users to access their tasks.
-
 
 ## Core Components:
 - GraphQL API: To expose task management functionalities (create, update, delete, query tasks).
@@ -23,18 +29,26 @@ This project is a learning piece for GraphQL and Specflow. It is not intended fo
 - SQL Server: As a database.
 - SpecFlow: To run tests.
 
-# Using the Queries / Mutations
+<hr>
+
+# Usage
+
+## Setup
 
 ## First a JWT token will need generating using the preset userId 
-_Temporary, until I have created a user create process_
+
+> [!NOTE]
+> There is no functionality to add a user. There is a preset user in the database as this is a learning piece only.
 
 ```
 query TodosByUserId {
     generateJwtToken(userId: "dff66c34-bd9b-4355-80ba-e7c7cd02d83f")
 }
 ```
+> [!NOTE]
+> After the token has been retrieved and added to the header as an authorization piece then the below queries/mutations can be posted.
 
-### After the token has been retrieved and added to the header as an authorization piece then the below queries/mutations can be posted
+## Queries
 
 #### Get list of Todos for User
 ```
@@ -80,7 +94,7 @@ query TodosByPriority {
     }
 }
 ```
-
+## Mutations
 
 
 
