@@ -13,7 +13,7 @@ public class WriteDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Configure(); // Extension method, if it exists
-        modelBuilder.Seed();      // Extension method, if it exists
+        modelBuilder.Configure();
+        modelBuilder.Seed();
     }
 }

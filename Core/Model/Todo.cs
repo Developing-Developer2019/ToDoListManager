@@ -14,12 +14,8 @@ public class Todo
     public bool IsCompleted { get; set; }
     public Priority Priority { get; set; }
     
-    // Linking Id's
     public string UserId { get; set; }
-    
-    // Linked
+
     [ForeignKey("UserId")]
     public User User { get; set; }
-    
-    // Collections
 }

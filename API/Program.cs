@@ -1,6 +1,7 @@
 using API.Error;
 using API.Mutations;
 using API.Queries;
+using Core.Model;
 using Data.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,6 @@ using Service.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add database contexts
 builder.Services.AddDbContext<WriteDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -22,12 +22,10 @@ builder.Services.AddDbContext<ReadDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-// Register services
 builder.Services.AddTransient<ITodoQueryService, TodoQueryQueryService>();
 builder.Services.AddTransient<ITodoMutationService, TodoMutationService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
-// Add GraphQL services
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
@@ -37,8 +35,7 @@ builder.Services
     .AddSorting()
     .AddAuthorization();
 
-// JWT Authentication configuration
-var key = "7f532771-de9b-4185-af30-ba8b3d4a48d5-3f1735da-92e5-4408-87e3-b65c9d39b794"u8.ToArray();
+var key = EnvironmentSecrets.SecretKeyByte();
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
